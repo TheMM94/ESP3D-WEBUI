@@ -257,6 +257,13 @@ display: none;
   grid-template-columns: auto auto auto auto auto;
 }
 
+.grid-container2 {
+  display: inline-grid;
+  grid-gap: 10px;
+  padding: 10px;
+  grid-template-columns: auto auto auto auto auto;
+}
+
 .position-container {
   margin-left:-10px;
   display: inline-grid;
@@ -344,6 +351,11 @@ display: none;
     grid-template-columns: 20% 20% 20% 20% 20%;
     }
 }
+
+.grid-container2 {
+  grid-template-columns: 100%;
+}
+
 @media (min-width: 641px){
 .container-fluid{
   min-width:350px;

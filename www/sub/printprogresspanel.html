@@ -1,0 +1,30 @@
+<div id="printProgressPanal" class="panel panel-default panel-flex-col">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="pull-left" >
+                        <b><span translate>Progress Panal</span></b>
+                </div>
+                <div class="pull-right">
+                    <div class="panel-flex-row">
+                            <table class="checkbox"><tr><td>&nbsp;&nbsp;</td><td>
+                                <label>
+                                    <input type="checkbox" id="autocheck_temperature" onclick=""/>
+                                    <span  translate>auto-check every:</span>
+                                </label>
+                                </td></tr></table>
+                            <table class="input-group"><tr><td>
+                                <input class="form-control w4"  type="number"  min="1" max="99" id="tempInterval_check" onchange="onTempIntervalChange()" />
+                                <span  class="input-group-addon form_control" translate>sec</span>
+                            </td></tr></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="progress-body" class="panel-body panel-flex-main"  >
+        <div class="progress" style="margin-bottom:0px;">
+            <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+        </div>
+    </div>
+</div>
