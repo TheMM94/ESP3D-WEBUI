@@ -56,7 +56,7 @@ function process_PrintProgress(response){
 				throw response;
 
 			var procent=progress*100/total;
-			document.getElementById("printProgressbar").innerHTML = procent+"% (Line: "+progress+"/"+total+")";
+			document.getElementById("printProgressbar").innerHTML = procent+"% (Byte: "+progress+"/"+total+")";
 			document.getElementById("printProgressbar").setAttribute("aria-valuenow",progress);
 			document.getElementById("printProgressbar").setAttribute("aria-valuemax",total);
 			document.getElementById("printProgressbar").setAttribute("style","width: "+procent+"%");
