@@ -280,6 +280,7 @@ function Disable_interface(lostconnection) {
     //No auto check
     on_autocheck_position(false);
     on_autocheck_temperature(false); 
+    on_autocheck_PrintProgress(false);
     on_autocheck_status(false); 
     if(async_webcommunication) {
 		event_source.removeEventListener('ActiveID', ActiveID_events, false);
