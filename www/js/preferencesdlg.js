@@ -19,6 +19,7 @@ var defaultpreferenceslist= "[{\
                                             \"enable_grbl_panel\":\"false\",\
                                             \"interval_positions\":\"3\",\
                                             \"interval_temperatures\":\"3\",\
+                                            \"interval_printProgress\":\"10\",\
                                             \"interval_status\":\"3\",\
                                             \"xy_feedrate\":\"1000\",\
                                             \"z_feedrate\":\"100\",\
@@ -26,6 +27,7 @@ var defaultpreferenceslist= "[{\
                                             \"e_distance\":\"5\",\
                                             \"f_filters\":\"gco;gcode\",\
                                             \"enable_temperatures_panel\":\"true\",\
+                                            \"enable_printProgress_panel\":\"true\",\
                                             \"enable_extruder_panel\":\"true\",\
                                             \"enable_files_panel\":\"true\",\
                                             \"enable_commands_panel\":\"true\",\
@@ -76,6 +78,7 @@ if ((target_firmware == "grbl-embedded" ) || (target_firmware == "grbl" )){
     
     document.getElementById('DHT_pref_panel').style.display = 'none';
     document.getElementById('temp_pref_panel').style.display = 'none';
+    document.getElementById('printProgress_pref_panel').style.display = 'none';
     document.getElementById('ext_pref_panel').style.display = 'none';
     document.getElementById('grbl_pref_panel').style.display = 'block';
     } else {
@@ -96,12 +99,14 @@ if ((target_firmware == "grbl-embedded" ) || (target_firmware == "grbl" )){
                                             \"enable_grbl_panel\":\"true\",\
                                             \"interval_positions\":\"3\",\
                                             \"interval_temperatures\":\"3\",\
+                                            \"interval_printProgress\":\"10\",\
                                             \"interval_status\":\"3\",\
                                             \"xy_feedrate\":\"1000\",\
                                             \"z_feedrate\":\"100\",\
                                             \"e_feedrate\":\"400\",\
                                             \"e_distance\":\"5\",\
                                             \"enable_temperatures_panel\":\"true\",\
+                                            \"enable_printProgress_panel\":\"true\",\
                                             \"enable_extruder_panel\":\"true\",\
                                             \"enable_files_panel\":\"true\",\
                                             \"f_filters\":\"g;G;gco;GCO;gcode;GCODE\",\
@@ -118,6 +123,7 @@ if ((target_firmware == "grbl-embedded" ) || (target_firmware == "grbl" )){
     else document.getElementById('DHT_pref_panel').style.display = 'block';
     
     document.getElementById('temp_pref_panel').style.display = 'block';
+    document.getElementById('printProgress_pref_panel').style.display = 'block';
     document.getElementById('ext_pref_panel').style.display = 'block';
     document.getElementById('grbl_pref_panel').style.display = 'none';
     }
@@ -178,6 +184,10 @@ function prefs_toggledisplay(id_source, forcevalue) {
         case 'show_temperatures_panel':
             if (document.getElementById(id_source).checked) document.getElementById("temperatures_preferences").style.display = "block";
             else document.getElementById("temperatures_preferences").style.display = "none";
+            break;
+        case 'show_printProgress_panel':
+            if (document.getElementById(id_source).checked) document.getElementById("printProgress_preferences").style.display = "block";
+            else document.getElementById("printProgress_preferences").style.display = "none";
             break;
         case 'enable_z_controls':
             if (document.getElementById(id_source).checked) document.getElementById("control_z_feedrate").style.display = "block";
@@ -345,6 +355,14 @@ function applypreferenceslist(){
         document.getElementById('temperaturesPanel').style.display='none';
         on_autocheck_temperature(false);
     }
+
+    if (preferenceslist[0].enable_printProgress_panel === 'true') {
+        document.getElementById('printProgressPanal').style.display='block';
+    }
+    else {
+        document.getElementById('printProgressPanal').style.display='none';
+        on_autocheck_PrintProgress(false);
+    }
     
     if (preferenceslist[0].enable_extruder_panel === 'true')document.getElementById('extruderPanel').style.display='flex';
     else document.getElementById('extruderPanel').style.display='none';
@@ -369,6 +387,7 @@ function applypreferenceslist(){
     document.getElementById('probefeedrate').value= parseInt(preferenceslist[0].probefeedrate);
     document.getElementById('probetouchplatethickness').value= parseFloat(preferenceslist[0].probetouchplatethickness);
     document.getElementById('tempInterval_check').value= parseInt(preferenceslist[0].interval_temperatures);
+    document.getElementById('printProgressInterval_check').value= parseInt(preferenceslist[0].interval_printProgress);
     document.getElementById('filament_length').value= parseInt(preferenceslist[0].e_distance);
     document.getElementById('extruder_velocity').value= parseInt(preferenceslist[0].e_feedrate);
     build_file_filter_list(preferenceslist[0].f_filters);
@@ -456,6 +475,10 @@ function build_dlg_preferences_list(){
       if (typeof(preferenceslist[0].enable_temperatures_panel ) !== 'undefined') {
         document.getElementById('show_temperatures_panel').checked = (preferenceslist[0].enable_temperatures_panel === 'true');
      } else document.getElementById('show_temperatures_panel').checked = false;
+     //progress panal
+     if (typeof(preferenceslist[0].enable_printProgress_panel ) !== 'undefined') {
+        document.getElementById('show_printProgress_panel').checked = (preferenceslist[0].enable_printProgress_panel === 'true');
+     } else document.getElementById('show_printProgress_panel').checked = false;
      //extruders
       if (typeof(preferenceslist[0].enable_extruder_panel ) !== 'undefined') {
         document.getElementById('show_extruder_panel').checked = (preferenceslist[0].enable_extruder_panel === 'true');
@@ -502,6 +525,10 @@ function build_dlg_preferences_list(){
       if (typeof(preferenceslist[0].interval_temperatures ) !== 'undefined') {
         document.getElementById('preferences_tempInterval_check').value = parseInt(preferenceslist[0].interval_temperatures) ;
      } else document.getElementById('preferences_tempInterval_check').value = parseInt(default_preferenceslist[0].interval_temperatures);
+     //interval print progress
+     if (typeof(preferenceslist[0].interval_printProgress ) !== 'undefined') {
+        document.getElementById('preferences_printProgressInterval_check').value = parseInt(preferenceslist[0].interval_printProgress) ;
+     } else document.getElementById('preferences_printProgressInterval_check').value = parseInt(default_preferenceslist[0].interval_printProgress);
       //e feedrate
       if (typeof(preferenceslist[0].e_feedrate ) !== 'undefined') {
         document.getElementById('preferences_e_velocity').value = parseInt(preferenceslist[0].e_feedrate) ;
@@ -532,6 +559,7 @@ function build_dlg_preferences_list(){
      prefs_toggledisplay( 'show_control_panel');
      prefs_toggledisplay( 'show_extruder_panel');
      prefs_toggledisplay( 'show_temperatures_panel');
+     prefs_toggledisplay( 'show_printProgress_panel');
      prefs_toggledisplay( 'enable_z_controls');
      prefs_toggledisplay( 'show_commands_panel');
      prefs_toggledisplay( 'show_files_panel');
@@ -562,6 +590,7 @@ function closePreferencesDialog(){
             (typeof(preferenceslist[0].enable_grbl_panel ) === 'undefined') ||  
             (typeof(preferenceslist[0].enable_grbl_probe_panel ) === 'undefined') ||  
             (typeof(preferenceslist[0].enable_temperatures_panel ) === 'undefined') || 
+            (typeof(preferenceslist[0].enable_printProgress_panel ) === 'undefined') || 
             (typeof(preferenceslist[0].probemaxtravel ) === 'undefined') || 
             (typeof(preferenceslist[0].probefeedrate ) === 'undefined') || 
             (typeof(preferenceslist[0].probetouchplatethickness ) === 'undefined') || 
@@ -569,6 +598,7 @@ function closePreferencesDialog(){
             (typeof(preferenceslist[0].enable_files_panel ) === 'undefined') ||
             (typeof(preferenceslist[0].interval_positions ) === 'undefined') ||
             (typeof(preferenceslist[0].interval_temperatures ) === 'undefined') ||
+            (typeof(preferenceslist[0].interval_printProgress ) === 'undefined') ||
             (typeof(preferenceslist[0].interval_status ) === 'undefined') ||
             (typeof(preferenceslist[0].enable_autoscroll ) === 'undefined') ||
             (typeof(preferenceslist[0].enable_verbose_mode ) === 'undefined') ||
@@ -601,6 +631,8 @@ function closePreferencesDialog(){
             if (document.getElementById('show_control_panel').checked !=  (preferenceslist[0].enable_control_panel === 'true')) modified = true;
             //temperatures panel
             if (document.getElementById('show_temperatures_panel').checked != (preferenceslist[0].enable_temperatures_panel === 'true')) modified = true;
+            //print progress panel
+            if (document.getElementById('show_printProgress_panel').checked != (preferenceslist[0].enable_printProgress_panel === 'true')) modified = true;
             //grbl panel
             if (document.getElementById('show_grbl_panel').checked != (preferenceslist[0].enable_grbl_panel === 'true')) modified = true;
             //grbl probe panel
@@ -621,6 +653,8 @@ function closePreferencesDialog(){
             if (document.getElementById('preferences_control_z_velocity').value != parseInt(preferenceslist[0].z_feedrate)) modified = true;
             //interval temperatures
             if (document.getElementById('preferences_tempInterval_check').value != parseInt(preferenceslist[0].interval_temperatures)) modified = true;
+            //interval print progress
+            if (document.getElementById('preferences_printProgressInterval_check').value != parseInt(preferenceslist[0].interval_printProgress)) modified = true;
             //e feedrate
             if (document.getElementById('preferences_e_velocity').value != parseInt(preferenceslist[0].e_feedrate)) modified = true;
             //e distance
@@ -673,6 +707,7 @@ function SavePreferences(current_preferences){
              !Checkvalues("preferences_control_z_velocity") ||
              !Checkvalues("preferences_e_velocity") ||
              !Checkvalues("preferences_tempInterval_check") ||
+             !Checkvalues("preferences_printProgressInterval_check") ||
              !Checkvalues("preferences_filters") ||
              !Checkvalues("preferences_filament_length")||
              !Checkvalues("preferences_probemaxtravel") ||
@@ -695,6 +730,7 @@ function SavePreferences(current_preferences){
         saveprefs +="\",\"enable_control_panel\":\"" +  document.getElementById('show_control_panel').checked ;
         saveprefs +="\",\"enable_grbl_probe_panel\":\"" +  document.getElementById('show_grbl_probe_tab').checked ;
         saveprefs +="\",\"enable_temperatures_panel\":\"" +  document.getElementById('show_temperatures_panel').checked ;
+        saveprefs +="\",\"enable_printProgress_panel\":\"" +  document.getElementById('show_printProgress_panel').checked ;
         saveprefs +="\",\"enable_extruder_panel\":\"" +  document.getElementById('show_extruder_panel').checked ;
         saveprefs +="\",\"enable_grbl_panel\":\"" +  document.getElementById('show_grbl_panel').checked ;
         saveprefs +="\",\"enable_files_panel\":\"" +  document.getElementById('show_files_panel').checked ;
@@ -706,6 +742,7 @@ function SavePreferences(current_preferences){
         saveprefs +="\",\"xy_feedrate\":\"" +  document.getElementById('preferences_control_xy_velocity').value ;
         saveprefs +="\",\"z_feedrate\":\"" +  document.getElementById('preferences_control_z_velocity').value ;
         saveprefs +="\",\"interval_temperatures\":\"" +  document.getElementById('preferences_tempInterval_check').value ;
+        saveprefs +="\",\"interval_printProgress\":\"" +  document.getElementById('preferences_printProgressInterval_check').value ;
         saveprefs +="\",\"e_feedrate\":\"" +  document.getElementById('preferences_e_velocity').value ;
         saveprefs +="\",\"e_distance\":\"" +  document.getElementById('preferences_filament_length').value ;
         saveprefs +="\",\"f_filters\":\"" +  document.getElementById('preferences_filters').value ;
@@ -782,6 +819,13 @@ var value = 0;
             value = parseInt(document.getElementById(id_2_check).value);
             if (!(!isNaN(value) && value > 0 && value < 100 )) { 
                error_message = translate_text_item( "Value of auto-check must be between 0s and 99s !!");
+               status = false;
+                }
+            break;
+         case "preferences_printProgressInterval_check":
+            value = parseInt(document.getElementById(id_2_check).value);
+            if (!(!isNaN(value) && value > 0 && value < 301 )) { 
+               error_message = translate_text_item( "Value of auto-check must be between 0s and 300s !!");
                status = false;
                 }
             break;

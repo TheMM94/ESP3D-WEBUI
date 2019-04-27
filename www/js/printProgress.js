@@ -40,7 +40,7 @@ function onPrintProgressChange(){
 
 function getPrintProgress(){
 	var command = "M27";
-	SendPrinterCommand(command, false, process_PrintProgress ,null ,105 , 1);
+	SendPrinterCommand(command, false, process_PrintProgress ,null ,27 , 1);
 }
 
 function process_PrintProgress(response){
@@ -49,17 +49,16 @@ function process_PrintProgress(response){
 		var p_start=response.indexOf("SD printing byte ");
 		var p_slash=response.indexOf("/");
 		if(p_start>-1 && p_slash>-1 && p_start<p_slash && response.length>=20) {
-			var progress=parseInt(response.substring(p_start+17,p_slash));
-			var total=parseInt(response.substring(p_slash+1,response.length));
+			var progress=parseFloat(response.substring(p_start+17,p_slash));
+			var total=parseFloat(response.substring(p_slash+1,response.length));
 
-			if(isNaN(progress) ||isNaN(total))
+			if(isNaN(progress) || isNaN(total))
 				throw response;
 
-			var procent=progress*100/total;
-			document.getElementById("printProgressbar").innerHTML = procent+"% (Byte: "+progress+"/"+total+")";
+			var procent=progress*100.0/total;
+			document.getElementById("printProgressbar").innerHTML = procent.toFixed(2)+"% (Byte: "+progress+"/"+total+")";
 			document.getElementById("printProgressbar").setAttribute("aria-valuenow",progress);
 			document.getElementById("printProgressbar").setAttribute("aria-valuemax",total);
-			document.getElementById("printProgressbar").setAttribute("style","width: "+procent+"%");
 
 			if(progress>=total) {
 				document.getElementById("printProgressbar").setAttribute("class","progress-bar progress-bar-striped");
@@ -72,7 +71,7 @@ function process_PrintProgress(response){
 		}
 		else if(response.indexOf("Not SD printing")!=-1) {
 			document.getElementById("printProgressbar").setAttribute("class","progress-bar");
-			document.getElementById("printProgressbar").innerHTML = "No File is Printing from the SD Card";
+			document.getElementById("printProgressbar").innerHTML = translate_text_item("No File is currently Printing from the SD Card");
 			document.getElementById("printProgressbar").setAttribute("aria-valuenow","100");
 			document.getElementById("printProgressbar").setAttribute("aria-valuemax","100");
 			document.getElementById("printProgressbar").setAttribute("style","width: 100%");
@@ -84,7 +83,7 @@ function process_PrintProgress(response){
 	catch (e)
 	{
 		document.getElementById("printProgressbar").setAttribute("class","progress-bar");
-		document.getElementById("printProgressbar").innerHTML = "Unknown Response:\n"+e;
+		document.getElementById("printProgressbar").innerHTML = translate_text_item("Unknown Response: \n")+e;
 		document.getElementById("printProgressbar").setAttribute("aria-valuenow","100");
 		document.getElementById("printProgressbar").setAttribute("aria-valuemax","100");
 		document.getElementById("printProgressbar").setAttribute("style","width: 100%; background-color:#ffc107;");		

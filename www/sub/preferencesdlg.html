@@ -163,6 +163,33 @@
                 </div>
             </div>
         </div>
+        <div id="printProgress_pref_panel" class="panel panel-default">
+            <div class="panel-heading">
+              <div class="checkbox">
+                    <label>
+                        <input type="checkbox" id="show_printProgress_panel" onclick="prefs_toggledisplay('show_printProgress_panel')" />
+                        <span  translate>Show Print Progress panel</span>
+                    </label>
+                </div>
+            </div>
+            <div id="printProgress_preferences" class="panel-body">
+                <div id="preferences_printProgressInterval_check_group">
+                    <table><tr><td>
+                    <span><span translate >Print Progress Refresh Time</span>:&nbsp;</span>
+                    </td><td>
+                    <div class="input-group has-control" >
+                        <input class="form-control w4" type="number" min="1" max="300" id="preferences_printProgressInterval_check" onchange="Checkvalues('preferences_printProgressInterval_check')"/>
+                        <span id="preferences_printProgressInterval_check_icon" class="form-control-feedback ico_feedback"></span>
+                    </div>
+                    </td><td>
+                    <div class="input-group" >
+                        <input class="hide_it"></input>
+                        <span class="input-group-addon form_control" translate>sec</span>
+                    </div>
+                    </td></tr></table>
+                </div>
+            </div>
+        </div>
         <div id="ext_pref_panel" class="panel panel-default">
             <div class="panel-heading">
                  <div class="checkbox">
