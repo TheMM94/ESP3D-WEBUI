@@ -59,15 +59,12 @@ function process_PrintProgress(response){
 			document.getElementById("printProgressbar").innerHTML = procent.toFixed(2)+"% (Byte: "+progress+"/"+total+")";
 			document.getElementById("printProgressbar").setAttribute("aria-valuenow",progress);
 			document.getElementById("printProgressbar").setAttribute("aria-valuemax",total);
+			document.getElementById("printProgressbar").setAttribute("style","width: "+procent+"%");
 
-			if(progress>=total) {
-				document.getElementById("printProgressbar").setAttribute("class","progress-bar progress-bar-striped");
-				document.getElementById("printProgressbar").setAttribute("style","width: "+procent+"%; background-color:#28a745;");
-			}
-			else {
+			if(progress>=total)
+				document.getElementById("printProgressbar").setAttribute("class","progress-bar progress-bar-success progress-bar-striped");
+			else
 				document.getElementById("printProgressbar").setAttribute("class","progress-bar progress-bar-striped active");
-				document.getElementById("printProgressbar").setAttribute("style","width: "+procent+"%");
-			}
 		}
 		else if(response.indexOf("Not SD printing")!=-1) {
 			document.getElementById("printProgressbar").setAttribute("class","progress-bar");
@@ -82,11 +79,11 @@ function process_PrintProgress(response){
 	}	
 	catch (e)
 	{
-		document.getElementById("printProgressbar").setAttribute("class","progress-bar");
+		document.getElementById("printProgressbar").setAttribute("class","progress-bar progress-bar-warning");
 		document.getElementById("printProgressbar").innerHTML = translate_text_item("Unknown Response: \n")+e;
 		document.getElementById("printProgressbar").setAttribute("aria-valuenow","100");
 		document.getElementById("printProgressbar").setAttribute("aria-valuemax","100");
-		document.getElementById("printProgressbar").setAttribute("style","width: 100%; background-color:#ffc107;");		
+		document.getElementById("printProgressbar").setAttribute("style","width: 100%");	
 	}
 
 }
