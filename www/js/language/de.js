@@ -316,6 +316,8 @@ var germantrans = {
 "Print Progress Refresh Time":"Druck fortschritt intervall",
 "3D Printer Firmware Update":"3D Drucker Firmware Update",
 "Update Pritner Firmware ?":"Drucker Firmware updaten ?",
+"Restarting 3D Printer in Bootloader...":"Neustart des 3D Drucker im Bootloader",
+"Restarting 3D Printer in Faild!!! ":"Neustart des 3D Drucker fehlgeschlagen ",
 "Hold:0":"Hold complete. Ready to resume.",
 "Hold:1":"Hold in-progress. Reset will throw an alarm.",
 "Door:0":"Door closed. Ready to resume.",
