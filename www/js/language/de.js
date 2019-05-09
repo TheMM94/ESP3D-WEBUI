@@ -311,7 +311,7 @@ var germantrans = {
 "Please Refresh!":"Bitte Aktualisieren!",
 "Value of auto-check must be between 0s and 300s !!":"Der Wert des Auto-Checks muss zwischen 0s und 300s liegen !!",
 "No File is currently Printing from the SD Card":"Aktuell wird keine Datei von der SD-Karte gedruckt",
-"Unknown Response: \n":"Unbekannte Antwort: \n",
+"Unknown Response: ":"Unbekannte Antwort: ",
 "Show Print Progress panel":"Zeige Druck fortschritt Panel",
 "Print Progress Refresh Time":"Druck fortschritt intervall",
 "Hold:0":"Hold complete. Ready to resume.",
