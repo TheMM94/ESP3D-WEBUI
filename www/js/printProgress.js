@@ -47,7 +47,7 @@ function process_PrintProgress(response){
 	try{
 		response=response.trim();
 		var p_start=response.indexOf("SD printing byte ");
-		var p_slash=response.indexOf("/");
+		var p_slash=response.indexOf("/",p_start);
 		if(p_start>-1 && p_slash>-1 && p_start<p_slash && response.length>=20) {
 			var progress=parseFloat(response.substring(p_start+17,p_slash));
 			var total=parseFloat(response.substring(p_slash+1,response.length));
@@ -73,14 +73,13 @@ function process_PrintProgress(response){
 			document.getElementById("printProgressbar").setAttribute("aria-valuemax","100");
 			document.getElementById("printProgressbar").setAttribute("style","width: 100%");
 		}
-		else {
+		else if (response.length!=0)
 			throw response;
-		}
 	}	
 	catch (e)
 	{
 		document.getElementById("printProgressbar").setAttribute("class","progress-bar progress-bar-warning");
-		document.getElementById("printProgressbar").innerHTML = translate_text_item("Unknown Response: \n")+e;
+		document.getElementById("printProgressbar").innerHTML = translate_text_item("Unknown Response: ")+e;
 		document.getElementById("printProgressbar").setAttribute("aria-valuenow","100");
 		document.getElementById("printProgressbar").setAttribute("aria-valuemax","100");
 		document.getElementById("printProgressbar").setAttribute("style","width: 100%");	

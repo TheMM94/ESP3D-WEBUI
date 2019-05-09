@@ -27,6 +27,9 @@ function Monitor_output_Update(message){
      if (message) {
         if (typeof message === 'string' || message instanceof String) {
             Monitor_output = Monitor_output.concat(message);
+                                
+            if(message.indexOf("SD printing byte ")!=-1 || message.indexOf("Not SD printing")!=-1)
+                process_PrintProgress(message);
         }
         else 
             {
