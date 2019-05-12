@@ -101,18 +101,18 @@ function Printer_StartUploadUpdatefile(response) {
 }
 
 function printer_updatesuccess(response){
-    document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Restarting, please wait....");
+    document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Restarting 3D Printer, please wait....");
     document.getElementById("printer_fw_file_name").innerHTML="";
     var i = 0;
 	var interval;
 	var x = document.getElementById("printer_prgfw");
-	x.max=40;
+	x.max=30;
 	interval = setInterval(function(){
 		i=i+1;
 		var x = document.getElementById("printer_prgfw");
 		x.value=i;
-        document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Restarting, please wait....") + (41-i) +translate_text_item(" seconds") ;
-		if (i>40){
+        document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Restarting 3D Printer, please wait....") + (31-i) +translate_text_item(" seconds") ;
+		if (i>30){
             update_ongoing=false;
 			clearInterval(interval);
 			location.reload();
@@ -123,9 +123,10 @@ function printer_updatesuccess(response){
 function printer_updatefailed(errorcode, response){
     document.getElementById('printer_fw-select_form').style.display = 'block';
     document.getElementById('printer_prgfw').style.display = 'none';
-    document.getElementById('printer_uploadfw-button').style.display = 'block';
-    document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Upload failed : ") + errorcode + " :" + response;
+    document.getElementById('printer_uploadfw-button').style.displsay = 'block';
+    document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Upload failed : ") + errorcode + "<br>" + response;
     console.log("Error " + errorcode + " : " + response);
+    alertdlg (translate_text_item("3D Printer Firmware Update Error"), translate_text_item( "Upload failed : ")+errorcode+ "<br>" +response);
     update_ongoing=false;
 }
 
