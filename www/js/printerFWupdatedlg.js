@@ -67,9 +67,9 @@ function Printer_ResetuC(response){
 }
 
 function Printer_StartUploadUpdatefile(response) {
-    if (response.indexOf("uC Reset okay")<0) {
-        document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Restarting 3D Printer in Faild!!! "+response);
-        alertdlg (translate_text_item("Error"), translate_text_item( "Restarting 3D Printer in Faild!!! ")+response);
+    if (response.indexOf("uC Reset and Erase okay")<0) {
+        document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Restarting 3D Printer Faild!!! "+response);
+        alertdlg (translate_text_item("Error"), translate_text_item( "Restarting 3D Printer Faild!!! ")+response);
         return;
     }
 
@@ -106,16 +106,16 @@ function printer_updatesuccess(response){
     var i = 0;
 	var interval;
 	var x = document.getElementById("printer_prgfw");
-	x.max=30;
+	x.max=10;
 	interval = setInterval(function(){
 		i=i+1;
 		var x = document.getElementById("printer_prgfw");
 		x.value=i;
-        document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Restarting 3D Printer, please wait....") + (31-i) +translate_text_item(" seconds") ;
-		if (i>30){
+        document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Restarting 3D Printer, please wait....") + (10-i) +translate_text_item(" seconds") ;
+		if (i>10){
             update_ongoing=false;
-			clearInterval(interval);
-			location.reload();
+            clearInterval(interval);
+            document.getElementById('printer_updatemsg').innerHTML = translate_text_item("3D Printer Update Finished");
 		}
 	},1000);
 }
