@@ -68,7 +68,14 @@ function process_PrintProgress(response){
 		}
 		else if(response.indexOf("Not SD printing")!=-1) {
 			document.getElementById("printProgressbar").setAttribute("class","progress-bar");
-			document.getElementById("printProgressbar").innerHTML = translate_text_item("No File is currently Printing from the SD Card");
+			document.getElementById("printProgressbar").innerHTML = translate_text_item("No File is currently printing from the SD Card");
+			document.getElementById("printProgressbar").setAttribute("aria-valuenow","100");
+			document.getElementById("printProgressbar").setAttribute("aria-valuemax","100");
+			document.getElementById("printProgressbar").setAttribute("style","width: 100%");
+		}
+		else if(response.indexOf("busy: processing")!=-1){
+			document.getElementById("printProgressbar").setAttribute("class","progress-bar");
+			document.getElementById("printProgressbar").innerHTML = translate_text_item("Busy processing, please wait");
 			document.getElementById("printProgressbar").setAttribute("aria-valuenow","100");
 			document.getElementById("printProgressbar").setAttribute("aria-valuemax","100");
 			document.getElementById("printProgressbar").setAttribute("style","width: 100%");
@@ -79,7 +86,7 @@ function process_PrintProgress(response){
 	catch (e)
 	{
 		document.getElementById("printProgressbar").setAttribute("class","progress-bar progress-bar-warning");
-		document.getElementById("printProgressbar").innerHTML = translate_text_item("Unknown Response: ")+e;
+		document.getElementById("printProgressbar").innerHTML = translate_text_item("Unknown response: ")+e;
 		document.getElementById("printProgressbar").setAttribute("aria-valuenow","100");
 		document.getElementById("printProgressbar").setAttribute("aria-valuemax","100");
 		document.getElementById("printProgressbar").setAttribute("style","width: 100%");	

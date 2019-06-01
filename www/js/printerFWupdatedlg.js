@@ -1,4 +1,5 @@
 var printer_update_ongoing=false;
+var printer_restart_successful=false;
 var printer_current_update_filename="";
 //pritner update dialog
 function printerFWupdatedlg () {
@@ -21,6 +22,12 @@ function printer_closeUpdateDialog(msg){
     if (printer_update_ongoing) {
         alertdlg (translate_text_item("Busy..."), translate_text_item("Update is ongoing, please wait and retry."));
         return;
+    }
+    if(printer_restart_successful){
+        document.getElementById('printer_fw-select_form').style.display = 'block';
+        document.getElementById('printer_uploadfw-button').style.display = 'block';
+        document.getElementById('printer_updatemsg').style.display='none';
+        printer_restart_successful=false;
     }
     closeModal(msg);
 }
@@ -51,7 +58,7 @@ function printer_UpdateProgressDisplay(oEvent){
     if (oEvent.lengthComputable) {
         var percentComplete = (oEvent.loaded / oEvent.total)*100;
         document.getElementById('printer_prgfw').value=percentComplete;
-        document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Uploading ") + current_update_filename + " " + percentComplete.toFixed(0)+"%" ;
+        document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Uploading ") + printer_current_update_filename + " " + percentComplete.toFixed(0)+"%" ;
     }
 }
 
@@ -62,6 +69,10 @@ function Pritner_UploadUpdatefile() {
 function Printer_ResetuC(response){
     if (response != "yes") 
         return;
+    printer_update_ongoing=true;
+    document.getElementById('printer_fw-select_form').style.display = 'none';
+    document.getElementById('printer_uploadfw-button').style.display = 'none';
+    document.getElementById('printer_updatemsg').style.display='block';
     document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Restarting 3D Printer in Bootloader...");
     SendGetHttp("/StartPrinterFWUpdate", Printer_StartUploadUpdatefile, null);
 }
@@ -70,11 +81,19 @@ function Printer_StartUploadUpdatefile(response) {
     if (response.indexOf("uC Reset and Erase okay")<0) {
         document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Restarting 3D Printer Faild!!! "+response);
         alertdlg (translate_text_item("Error"), translate_text_item( "Restarting 3D Printer Faild!!! ")+response);
+        document.getElementById('printer_fw-select_form').style.display = 'block';
+        document.getElementById('printer_uploadfw-button').style.display = 'block';
+        document.getElementById('printer_updatemsg').style.display='none';
+        printer_update_ongoing=false;
         return;
     }
 
     if (http_communication_locked) {
         alertdlg (translate_text_item("Busy..."), translate_text_item("Communications are currently locked, please wait and retry."));
+        document.getElementById('printer_fw-select_form').style.display = 'block';
+        document.getElementById('printer_uploadfw-button').style.display = 'block';
+        document.getElementById('printer_updatemsg').style.display='none';
+        printer_update_ongoing=false;
         return;
     }
     var files = document.getElementById('printer_fw-select').files
@@ -87,16 +106,13 @@ function Printer_StartUploadUpdatefile(response) {
         formData.append(arg, file.size);
         formData.append('myfile[]', file, "/"+file.name);
     }
-    document.getElementById('printer_fw-select_form').style.display = 'none';
-    document.getElementById('printer_uploadfw-button').style.display = 'none';
-    update_ongoing=true;
-    document.getElementById('printer_updatemsg').style.display='block';
+
     document.getElementById('printer_prgfw').style.display = 'block';
     if (files.length == 1)
-        current_update_filename = files[0].name;
+        printer_current_update_filename = files[0].name;
     else 
-        current_update_filename = "";
-    document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Uploading ") + current_update_filename;
+        printer_current_update_filename = "";
+    document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Uploading ") + printer_current_update_filename;
     SendFileHttp(url, formData, printer_UpdateProgressDisplay, printer_updatesuccess, printer_updatefailed)
 }
 
@@ -113,7 +129,8 @@ function printer_updatesuccess(response){
 		x.value=i;
         document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Restarting 3D Printer, please wait....") + (10-i) +translate_text_item(" seconds") ;
 		if (i>10){
-            update_ongoing=false;
+            printer_update_ongoing=false;
+            printer_restart_successful=true;
             clearInterval(interval);
             document.getElementById('printer_updatemsg').innerHTML = translate_text_item("3D Printer Update Finished");
 		}
@@ -127,7 +144,7 @@ function printer_updatefailed(errorcode, response){
     document.getElementById('printer_updatemsg').innerHTML = translate_text_item("Upload failed : ") + errorcode + "<br>" + response;
     console.log("Error " + errorcode + " : " + response);
     alertdlg (translate_text_item("3D Printer Firmware Update Error"), translate_text_item( "Upload failed : ")+errorcode+ "<br>" +response);
-    update_ongoing=false;
+    printer_update_ongoing=false;
 }
 
 
