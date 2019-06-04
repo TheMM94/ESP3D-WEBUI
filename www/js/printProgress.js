@@ -73,7 +73,7 @@ function process_PrintProgress(response){
 			document.getElementById("printProgressbar").setAttribute("aria-valuemax","100");
 			document.getElementById("printProgressbar").setAttribute("style","width: 100%");
 		}
-		else if(response.indexOf("busy: processing")!=-1){
+		else if(response.indexOf("busy: processing")!=-1||response.indexOf("echo:busy")!=-1){
 			document.getElementById("printProgressbar").setAttribute("class","progress-bar");
 			document.getElementById("printProgressbar").innerHTML = translate_text_item("Busy processing, please wait");
 			document.getElementById("printProgressbar").setAttribute("aria-valuenow","100");
